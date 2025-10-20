@@ -46,3 +46,8 @@ C'est la page par défaut. Vous pouvez coller le contenu d'un ou plusieurs fichi
 ### 2. Cluster Visualizer
 
 Cette page se connecte à votre cluster Kubernetes via votre configuration locale. Elle liste tous les namespaces contenant des Network Policies. Sélectionnez un namespace dans le menu déroulant pour afficher une vue d'ensemble de toutes les politiques qui y sont appliquées.
+
+
+### 3. Rendering
+
+<img width="3064" height="1579" alt="image" src="https://github.com/user-attachments/assets/3741530b-278d-4bc8-ba07-81b9806a0272" />
