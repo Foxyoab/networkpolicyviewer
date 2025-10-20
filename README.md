@@ -1,46 +1,48 @@
-# Getting Started with Create React App
+# Visualiseur de Network Policies Kubernetes
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+Un outil web simple et interactif pour visualiser les politiques réseau (Network Policies) de Kubernetes.
 
-## Available Scripts
+## Fonctionnalités
 
-In the project directory, you can run:
+- **Visualisation depuis YAML** : Collez un ou plusieurs manifestes YAML de Network Policies (séparés par `---`) et visualisez-les instantanément.
+- **Explorateur de Cluster Live** : Connectez-vous à votre contexte Kubernetes local pour lister et visualiser toutes les politiques réseau présentes dans votre cluster, organisées par namespace.
+- **Interface Claire** : Une disposition en trois colonnes (Ingress, Cible, Egress) pour une compréhension facile et rapide des flux de trafic autorisés.
+- **Détection Intelligente** : Reconnaît les politiques ciblant des pods spécifiques ou un namespace entier.
 
-### `npm start`
+## Prérequis
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+- [Node.js](https://nodejs.org/) (version 16 ou supérieure)
+- [npm](https://www.npmjs.com/)
+- Un accès à un cluster Kubernetes via un fichier `kubeconfig` valide (généralement situé dans `~/.kube/config`).
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
+## Installation et Lancement
 
-### `npm test`
+1.  **Clonez le dépôt :**
+    ```sh
+    git clone https://github.com/Foxyoab/networkpolicyviewer.git
+    cd networkpolicyviewer
+    ```
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+2.  **Installez les dépendances :**
+    ```sh
+    npm install
+    ```
 
-### `npm run build`
+3.  **Lancez l'application (frontend + backend) :**
+    ```sh
+    npm run dev
+    ```
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+4.  Ouvrez votre navigateur et allez sur `http://localhost:3000`.
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+## Utilisation
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+L'application dispose de deux modes accessibles depuis la barre de navigation :
 
-### `npm run eject`
+### 1. YAML Visualizer
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+C'est la page par défaut. Vous pouvez coller le contenu d'un ou plusieurs fichiers de Network Policy dans l'éditeur de texte à gauche. Le graphe correspondant s'affichera à droite. S'il y a plusieurs politiques (séparées par `---`), un menu déroulant apparaîtra pour vous permettre de basculer entre elles.
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+### 2. Cluster Visualizer
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
-
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
+Cette page se connecte à votre cluster Kubernetes via votre configuration locale. Elle liste tous les namespaces contenant des Network Policies. Sélectionnez un namespace dans le menu déroulant pour afficher une vue d'ensemble de toutes les politiques qui y sont appliquées.
