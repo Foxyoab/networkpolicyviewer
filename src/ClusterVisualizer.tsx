@@ -47,7 +47,7 @@ export default function ClusterVisualizer() {
 
   const namespaces = useMemo(() => {
     const ns = new Set(allPolicies.map(p => p.metadata.namespace));
-    return Array.from(ns);
+    return ['All Namespaces', ...Array.from(ns)];
   }, [allPolicies]);
 
   useEffect(() => {
@@ -59,7 +59,9 @@ export default function ClusterVisualizer() {
   useEffect(() => {
     if (!selectedNamespace) return;
 
-    const policiesInNamespace = allPolicies.filter(p => p.metadata.namespace === selectedNamespace);
+    const policiesInNamespace = selectedNamespace === 'All Namespaces'
+      ? allPolicies
+      : allPolicies.filter(p => p.metadata.namespace === selectedNamespace);
     const newNodes: Node[] = [];
     const newEdges: Edge[] = [];
     let idCounter = 0;
@@ -130,11 +132,15 @@ export default function ClusterVisualizer() {
         targetLabel = `All Pods`;
       }
 
+      const policyName = selectedNamespace === 'All Namespaces'
+        ? `${policy.metadata.namespace}/${policy.metadata.name}`
+        : policy.metadata.name;
+
       const targetNode: Node = {
         id: policyId,
         type: 'targetNode',
         position: { x: targetX, y: yOffset + (columnHeight / 2) - (nodeHeight / 2) },
-        data: { label: `Policy: ${policy.metadata.name}\n(${targetLabel})` },
+        data: { label: `Policy: ${policyName}\n(${targetLabel})` },
       };
 
       ingressNodes.forEach((node, i) => node.position = { x: ingressX, y: yOffset + i * ySpacing });
