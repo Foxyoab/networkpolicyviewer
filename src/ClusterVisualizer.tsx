@@ -7,8 +7,9 @@ import TargetNode from './TargetNode';
 // In a real app, this would be a shared utility function.
 const getSelectorLabels = (selector: any, type: string): string => {
   if (!selector || Object.keys(selector).length === 0) return `all ${type}s`;
-  if (selector.matchLabels) return Object.entries(selector.matchLabels).map(([k, v]) => k === 'kubernetes.io/metadata.name' ? v as string : `${k}=${v}`).join('\n');
-  return '';
+  const labels = selector.matchLabels || selector;
+  if (Object.keys(labels).length === 0) return `all ${type}s`;
+  return Object.entries(labels).map(([k, v]) => k === 'kubernetes.io/metadata.name' ? v as string : `${k}=${v}`).join('\n');
 };
 
 const nodeTypes = { targetNode: TargetNode };
@@ -74,12 +75,13 @@ export default function ClusterVisualizer() {
       if (policy.spec.ingress) {
         policy.spec.ingress.forEach((rule: any, ruleIndex: number) => {
           const ports = rule.ports ? rule.ports.map((p: any) => `port ${p.port}/${p.protocol}`).join('\n') : 'all ports';
-          if (!rule.from || rule.from.length === 0) {
+          const fromRule = rule.from || rule._from;
+          if (!fromRule || fromRule.length === 0) {
             const fromId = `${policyId}-ingress-all-${ruleIndex}-${idCounter++}`;
             ingressNodes.push({ id: fromId, data: { label: 'All Sources' }, style: { backgroundColor: '#CFF4FC', borderColor: '#0DCAF0' }, sourcePosition: Position.Right, position: {x:0, y:0} });
             newEdges.push({ id: `edge-${fromId}`, source: fromId, target: policyId, label: ports, animated: true, style: { stroke: '#0DCAF0' } });
           } else {
-            rule.from.forEach((from: any, fromIndex: number) => {
+            fromRule.forEach((from: any, fromIndex: number) => {
               const fromId = `${policyId}-ingress-from-${ruleIndex}-${fromIndex}-${idCounter++}`;
               let label = '';
               if (from.ipBlock) label = `IP Block\n${from.ipBlock.cidr}`;
